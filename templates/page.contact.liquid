@@ -1,0 +1,72 @@
+<div id="contact_page">
+	<h1 class="page_heading">{{ page.title }}</h1>
+
+	{% if settings.contacts_map_toggle %}
+		<!--  GOOGLE MAP -->
+		{% include 'widget-googlemap' %}
+	{% endif %}
+
+	<div class="rte">
+		{{ page.content }}
+	</div>
+
+	{% form 'contact' %}
+		{% if form.posted_successfully? %}
+		<div class="alert alert-success">
+			<p>{% assign X = 'other_pages.contact_page.success_message' | t %}{% if X.size > 0 %}{{ X }}{% else %}Thanks for contacting us! We'll get back to you as soon as possible.{% endif %}</p>
+		</div>
+		{% endif %}
+
+		{% if form.errors %}
+		<div class="alert alert-warning">
+			<!-- {{ form.errors.size }} or {{ form.errors | size }} -->
+			<p>{% assign X = 'other_pages.contact_page.error_message' | t %}{% if X.size > 0 %}{{ X }}{% else %}Oops, sorry. We were unable to submit your inquiry because it contained errors. Please correct the following and submit again:{% endif %}</p>
+			{% for field in form.errors %}
+			<p>{{ field | capitalize | replace: 'Body', 'Message' }} — {{ form.errors.messages[field] }}</p>
+			{% endfor %}
+		</div>
+		{% endif %}
+
+		<div id="contactFormWrapper">
+			{% if customer %}
+				<input type="hidden" name="contact[name]" value="{{ customer.first_name }} {{ customer.last_name }}">
+				<input type="hidden" name="contact[email]" value="{{ customer.email }}">
+			{% else %}
+				<div class="row">
+					<div class="col-sm-4 form-group">
+						<label for="contactFormName">{% assign X = 'other_pages.contact_page.name' | t %}{% if X.size > 0 %}{{ X }}{% else %}Your Name{% endif %}:</label>
+						<input type="text" class="form-control" id="contactFormName" name="contact[name]" placeholder="" />
+					</div>
+					<div class="col-sm-4 form-group">
+						<label for="contactFormEmail">{% assign X = 'other_pages.contact_page.email' | t %}{% if X.size > 0 %}{{ X }}{% else %}Email{% endif %}:</label>
+						<input type="email" class="form-control" id="contactFormEmail" name="contact[email]" placeholder="" />
+					</div>
+					<div class="col-sm-4 form-group">
+						<label for="contactFormTelephone">{% assign X = 'other_pages.contact_page.phone_number' | t %}{% if X.size > 0 %}{{ X }}{% else %}Phone Number{% endif %}:</label>
+						<input type="telephone" class="form-control" id="contactFormTelephone" name="contact[phone]" placeholder="" />
+					</div>
+				</div>
+			{% endif %}
+
+			<div class="row">
+				<div class="col-sm-12 form-group">
+					<label for="contactFormMessage">{% assign X = 'other_pages.contact_page.message' | t %}{% if X.size > 0 %}{{ X }}{% else %}Message{% endif %}:</label>
+					<textarea class="form-control" rows="5" cols="75" id="contactFormMessage" name="contact[body]" placeholder=""></textarea>
+				</div>
+			</div>
+
+			<div class="btn-toolbar form-group">
+				<input type="submit" id="contactFormSubmit" value="{% assign X = 'other_pages.contact_page.submit_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Send{% endif %}" class="btn btn-alt" />
+				<input type="reset" value="{% assign X = 'other_pages.contact_page.clear_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Clear{% endif %}" class="btn btn-info">
+			</div>
+		</div><!-- contactFormWrapper -->
+	{% endform %}
+</div>
+
+<script>
+jQuery(function($){
+	$(document).ready(function() {
+		$('#contact_page form').formValidation();
+	});
+});
+</script>

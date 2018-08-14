@@ -1,0 +1,63 @@
+{% comment %}Is this product on sale?{% endcomment %}
+{% assign on_sale = false %}
+{% if product.compare_at_price > product.price %}
+  {% assign on_sale = true %}
+{% endif %}
+
+{% comment %}Is this product new?{% endcomment %}
+{% assign date_pub_y = product.published_at | date:'%Y' %}
+{% assign date_pub_d = product.published_at | date:'%j' %}
+{% assign date_now_y = 'now' | date:'%Y' %}
+{% assign date_now_d = 'now' | date:'%j' %}
+{% assign dates_diff_y = date_now_y | minus: date_pub_y | times: 365 %}
+{% assign dates_diff_d = date_now_d | minus: date_pub_d %}
+{% assign dates_diff = dates_diff_y | plus: dates_diff_d %}
+{% assign new_products_period = settings.new_products_period | plus: 0 %}
+
+<div class="product {% if template == 'index' %}product_homepage swiper-slide{% else %}col-xs-6 col-sm-6 col-md-4 product_collection {% cycle 'step3': 'item3_1', 'item3_2', 'item3_3' %} {% cycle 'step2': 'item2_1', 'item2_2' %}{% endif %}">
+<div class="product_wrapper">
+	<div class="product_img">
+		<a class="img_change" href="{{ product.url | within: collection }}">
+			<img src="{{ product.featured_image.src | product_img_url: 'medium' }}" alt="{{ product.featured_image.alt | escape }}" />
+			<img class="img__2" src="{% for image in product.images limit:1 offset:1 %}{{ image.src | product_img_url: 'medium' }}{% endfor %}" alt="{% for image in product.images limit:1 offset:1 %}{{ image.alt | escape }}{% endfor %}" />
+			{% if dates_diff <= new_products_period %}<span class="product_badge new">{% assign X = 'catalog.products_listing.new_products' | t %}{% if X.size > 0 %}{{ X }}{% else %}New{% endif %}</span>{% endif %}
+			{% if on_sale %}<span class="product_badge sale">–{{ product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0' }}%</span>{% endif %}
+		</a>
+	</div>
+
+	<div class="product_info">
+		<div class="product_name">
+			<a href="{{ product.url | within: collection }}">{{ product.title | truncate:50 }}</a>
+		</div>
+
+		<div class="product_desc product_desc__long">{{ product.description | strip_html | truncate: 350 }}</div>
+		<div class="product_desc product_desc__short">{{ product.description | strip_html | truncate: 150 }}</div>
+
+		<div class="product_price">
+			{% if product.price_varies %}<span class="money_text">{% assign X = 'catalog.products_listing.price_from' | t %}{% if X.size > 0 %}{{ X }}{% else %}From{% endif %} </span>{% endif %}
+			<span class="money">{{ product.price | money }}</span>
+			{% if on_sale %}<span class="money money_sale">{{ product.compare_at_price | money }}</span>{% endif %}
+		</div>
+
+		<div class="product_links">
+			<form method="post" action="/cart/add">
+				{% if product.available %}
+					{% if product.variants.size == 1 %}    
+						{% for variant in product.variants limit:1 %}
+							<input type="hidden" name="id" value="{{ variant.id }}" />
+							<button class="btn btn-cart" type="submit">{% assign X = 'catalog.products_listing.add_to_cart_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Add to cart{% endif %}</button>
+						{% endfor %}
+					{% else %}
+						<a class="btn btn_options" href="{{ product.url }}" title="{% assign X = 'catalog.products_listing.add_to_cart_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Add to cart{% endif %}"> {% assign X = 'catalog.products_listing.add_to_cart_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Add to cart{% endif %}</a>
+					{% endif %}
+				{% else %}
+					<button class="btn btn-cart btn-disabled" disabled="disabled">{% assign X = 'catalog.products_listing.unavailable_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Unavailable{% endif %}</button>
+				{% endif %}
+			</form>
+
+			{% comment %}<a class="btn" href="{{ product.url | within: collection }}">{% assign X = 'catalog.products_listing.view_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}View{% endif %}</a>{% endcomment %}
+			<a class="btn quick_view_btn" href="{{ product.url }}">{% assign X = 'catalog.products_listing.quick_view_button' | t %}{% if X.size > 0 %}{{ X }}{% else %}Quick view{% endif %}</a>
+		</div>
+	</div>
+</div>
+</div>

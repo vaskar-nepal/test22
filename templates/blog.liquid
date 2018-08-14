@@ -1,0 +1,58 @@
+{% paginate blog.articles by 3 %}
+<div class="blog_listing">
+	{% if current_tags %}
+		<h1 class="page_heading">{{ blog.title | link_to: blog.url }} &raquo; {{ current_tags.first }}<a href="{{ blog.url }}.atom" target="_blank"></a></h1>
+	{% else %}
+		<h1 class="page_heading">{{ blog.title }}<a href="{{ blog.url }}.atom" target="_blank"></a></h1>
+	{% endif %}
+
+	{% for article in blog.articles %}
+  	<div class="blog_listing__article">
+		<h2 class="article_title">
+			<a href="{{ article.url }}">{{ article.title }}</a>
+		</h2>
+
+		<div class="article_info">
+			<time class="article_date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%d %b %Y' }}</time>
+
+			<span class="article_author">{{ article.author }}</span>
+
+			{% if blog.comments_enabled? %}
+				<span class="article_comments">{{ article.comments_count }} {% assign X = 'blog.general.comments' | t %}{% if X.size > 0 %}{{ X }}{% else %}comments{% endif %}</span>
+			{% endif %}
+		</div>
+
+		<div class="article_body">
+			{% if article.image %}<div class="article_img">{{ article.image.src | img_url: 'original' | img_tag: article.title }}</div>{% endif %}
+
+			<div class="article_content rte">
+				{{ article.content | strip_html | truncatewords: 33 }}
+			</div>
+		</div>
+
+		<div class="article_footer">
+			{% if article.tags.size > 0 %}
+				<p class="blog_tags">
+					{% for tag in article.tags %}
+						<a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>
+					{% endfor %}
+				</p>
+			{% endif %}
+
+			<a class="btn" href="{{ article.url }}">{% assign X = 'blog.general.read_more' | t %}{% if X.size > 0 %}{{ X }}{% else %}Read more{% endif %}</a>
+		</div>
+	</div>
+	{% endfor %}
+    
+	{% if paginate.pages > 1 %}
+	<div class="product_listing_controls">
+		<p class="products_count">{% assign X = 'blog.pagination.page_number' | t: current_page: paginate.current_page, pages_total: paginate.pages %}{% if X.size > 0 %}{{ X }}{% else %}Page {{ paginate.current_page }} of {{ paginate.pages }}{% endif %}</p>
+
+		<div id="pagination" class="blog_listing__pagination">
+			{% comment %}{{ paginate | default_pagination | replace: 'Previous', 'Newer articles' | replace: 'Next', 'Older articles' }}{% endcomment %}
+			{{ paginate | default_pagination }}
+		</div>
+	</div>
+	{% endif %}
+</div>
+{% endpaginate %}

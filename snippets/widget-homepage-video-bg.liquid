@@ -1,0 +1,27 @@
+<!-- HOMEPAGE VIDEO -->
+<div id="custom_video_bg">
+	<div id="bg_video" data-property="{videoURL:'{{ settings.video_block_src }}', containment:'self', autoPlay:true, mute:true, startAt:0, opacity:1, loop:true, showControls:false, optimizeDisplay:true}">
+		<div id="bg_video__content">
+			<div class="homepage_video">
+              
+                <div class="textblock_wr">
+
+                    {% assign X = 'custom_blocks.homepage_video.text_1' | t %}
+                    {% if X.size > 0 %}<h3 class="minor_heading">{{ X }}</h3>
+                    {% elsif settings.homepage_bg_video_block_text1 and settings.homepage_bg_video_block_text1 != '' %}
+                    <h3 class="minor_heading">{{ settings.homepage_bg_video_block_text1 }}</h3>
+                    {% endif %}
+
+                    {% assign X = 'custom_blocks.homepage_video.text_2' | t %}
+                    {% if X.size > 0 %}
+                    <h4>{{ X }}</h4>
+                    {% elsif settings.homepage_bg_video_block_text2 and settings.homepage_bg_video_block_text2 !="" %}
+                    <h4>{{ settings.homepage_bg_video_block_text2 }}</h4>
+                    {% endif %}
+
+                </div>
+           </div>
+        </div>
+	</div>
+</div>
+

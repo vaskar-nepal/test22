@@ -1,0 +1,109 @@
+<div class="page_sitemap">
+	<h1 class="page_heading">{{ page.title }}</h1>
+
+	<div class="rte">
+		{{ page.content }}
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			{% if settings.sitemap_collections_toggle %}
+				<h2>{% assign X = 'layout.sidebar.collections' | t %}{% if X.size > 0 %}{{ X }}{% else %}Collections{% endif %}</h2>
+
+				<ul>
+					{% for collection in collections %}
+						<li>
+							<a href="{{ collection.url }}">{{ collection.title | escape }} ({{ collection.products_count }} {% assign X = 'catalog.collections_listing.products_quantity' | t %}{% if X.size > 0 %}{{ X }}{% else %}products{% endif %})</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+
+			{% if settings.sitemap_blog_toggle %}
+				<h2>{{ blogs[settings.sitemap_blog_select].title }}</h2>
+
+				<ul>
+					{% for article in blogs[settings.sitemap_blog_select].articles limit:5 %}
+						<li><a href="{{ article.url }}">{{ article.title | truncate:60 }}</a></li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+
+		{% if settings.sitemap_types_toggle %}
+			<div class="col-sm-3">
+				<h2>{% assign X = 'layout.sidebar.product_types' | t %}{% if X.size > 0 %}{{ X }}{% else %}Product Types{% endif %}</h2>
+
+				<ul>
+					{% for product_type in shop.types %}
+						{% if product_type.size > 0 %}
+							<li>{{ product_type | link_to_type }}</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+
+		{% if settings.sitemap_vendors_toggle %}
+			<div class="col-sm-3">
+				<h2>{% assign X = 'layout.sidebar.vendors' | t %}{% if X.size > 0 %}{{ X }}{% else %}Vendors{% endif %}</h2>
+
+				<ul>
+					{% for vendor in shop.vendors %}
+						<li>{{ vendor | link_to_vendor }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+
+		<div class="col-sm-12 sitemap_separator"></div>
+
+		{% if settings.sitemap_menu1_toggle %}
+			<div class="col-sm-3">
+				<h2>{{ linklists[settings.sitemap_menu1_list].title }}</h2>
+
+				<ul class="footer_links">
+					{% for link in linklists[settings.sitemap_menu1_list].links limit:10 %}
+					<li>{{ link.title | link_to: link.url }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+
+		{% if settings.sitemap_menu2_toggle %}
+			<div class="col-sm-3">
+				<h2>{{ linklists[settings.sitemap_menu2_list].title }}</h2>
+
+				<ul class="footer_links">
+					{% for link in linklists[settings.sitemap_menu2_list].links limit:10 %}
+					<li>{{ link.title | link_to: link.url }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+
+		{% if settings.sitemap_menu3_toggle %}
+			<div class="col-sm-3">
+				<h2>{{ linklists[settings.sitemap_menu3_list].title }}</h2>
+
+				<ul class="footer_links">
+					{% for link in linklists[settings.sitemap_menu3_list].links limit:10 %}
+					<li>{{ link.title | link_to: link.url }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+
+		{% if settings.sitemap_menu4_toggle %}
+			<div class="col-sm-3">
+				<h2>{{ linklists[settings.sitemap_menu4_list].title }}</h2>
+
+				<ul class="footer_links">
+					{% for link in linklists[settings.sitemap_menu4_list].links limit:10 %}
+					<li>{{ link.title | link_to: link.url }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		{% endif %}
+	</div>
+</div>

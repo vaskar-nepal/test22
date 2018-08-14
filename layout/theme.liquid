@@ -1,0 +1,259 @@
+<!doctype html>
+<html class="color_scheme">
+<head>
+<!-- META TAGS -->
+	<meta charset="utf-8">
+	<!--[if IE]>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<![endif]-->
+	{% if page_description %}<meta name="description" content="{{ page_description }}" />{% endif %}
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+<!-- PAGE TITLE -->
+	{% case template %}{% when 'index' %}<title>{{ shop.name }} | {{ page_title }}</title>{% when '404' %}<title>Page Not Found | {{ shop.name }}</title>{% else %}<title>{{ page_title }} | {{ shop.name }}</title>{% endcase %}
+
+<!-- LINK TAGS -->
+	<link rel="canonical" href="{{ canonical_url }}" />
+	<link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/x-icon" />
+
+<!-- GOOGLE FONTS -->
+	{% if settings.base_font and settings.base_font contains 'google_fonts:' %}
+		<link href="//fonts.googleapis.com/css?family={{ settings.base_font | replace:'google_fonts:' | replace: ' ','+' }}:300,400,700,900" rel="stylesheet" type="text/css">
+	{% endif %}
+	{% if settings.heading_font and settings.heading_font contains 'google_fonts:' and settings.heading_font != settings.base_font %}
+		<link href="//fonts.googleapis.com/css?family={{ settings.heading_font | replace:'google_fonts:' | replace: ' ','+' }}:300,400,700,900" rel="stylesheet" type="text/css">
+	{% endif %}
+
+<!-- CSS -->
+	{{ 'assets.css' | asset_url | stylesheet_tag }}
+	{{ 'style.scss.css' | asset_url | stylesheet_tag }}
+	{{ 'fl-bigmug-line.css' | asset_url | stylesheet_tag }}
+	{{ 'fl-36-slim-icons.css' | asset_url | stylesheet_tag }}
+	{% if settings.responsive_toggle %}
+		{{ 'responsive.scss.css' | asset_url | stylesheet_tag }}
+	{% endif %}
+
+<!-- JS -->
+	{{ 'jquery.1.8.3.js' | asset_url | script_tag }}
+
+<!-- SHOPIFY SERVICE SCRIPTS -->
+	{{ content_for_header }}
+</head>
+<body {% if template == 'index' and settings.homepage_map_toggle %}onload="initialize()" {% elsif template == 'page.contact' and settings.contacts_map_toggle %}onload="initialize()"{% endif %} id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }} scheme_{{ settings.color_scheme }}">
+
+<div id="page_preloader"><div class="global_loader"></div></div>
+
+{% if settings.color_scheme_switch %}
+	<!-- COLOR SCHEMES SWITCH -->
+	{% include 'widget-colors' %}
+{% endif %}
+
+{% if settings.newsletter_popup_toggle %}
+	<!-- NEWSLETTER POPUP -->
+	{% include 'widget-newsletter-popup' %}
+{% endif %}
+
+<div id="wrapper1">
+<div id="wrapper2">
+{% if settings.cookies_policy_toggle %}
+	<!-- COOKIES POLICY NOTIFICATION -->
+	{% include 'widget-cookies' %}
+{% endif %}
+
+{% if settings.promobanner_toggle %}
+	<!-- PROMO BANNER -->
+	{% include 'widget-promobanner' %}
+{% endif %}
+
+<div id="wrapper3">
+
+<div class="wrapper_main">
+<div class="wrapper_right">
+
+
+{% if template == 'index' %}
+
+{% if settings.homepage_info_toggle %}
+	<!-- HOMEPAGE INFO BLOCK -->
+	{% include 'widget-homepage-info' %}
+{% endif %}
+	
+	{% include 'widget-homepage-banners' %}
+	
+	<!-- CUSTOM BLOCKS WITH VIDEO BACKGROUND  -->
+	{% if settings.homepage_bg_video_block_toggle %}
+		{% include 'widget-homepage-video-bg' %}
+	{% endif %}
+
+{% endif %}
+
+<!-- MAIN CONTENT -->
+{% case template %}
+	{% when 'index', 'page.homepage', 'page.noasides', 'page.sitemap', 'list-collections', 'product', 'cart' %}
+		{% assign width_sidebars = false %}
+	{% else %}
+		{% assign width_sidebars = true %}
+{% endcase %}
+
+{% if template contains 'customers' %}
+	{% assign width_sidebars = false %}
+{% endif %}
+
+<div id="main" role="main">
+	<div class="container">
+	<!-- BREADCRUMBS -->
+	{% include 'widget-breadcrumbs' %}
+		<div class="row">
+			<div class="main_content {% if width_sidebars == true %}{% if template == 'blog' or template == 'article' %} col-sm-8{% else %} col-sm-9{% endif %}{% if settings.sidebar_toggle == 'sidebar_toggle_left' %}{% if template == 'blog' or template == 'article' %} col-sm-push-4{% else %} col-sm-push-3{% endif %}{% endif %}{% else %} col-sm-12{% endif %}">
+				{% if template == 'list-collections' %}
+					{% include 'collection-listing' %}
+				{% else %}
+					{{ content_for_layout }}
+				{% endif %}
+			</div>
+
+			{% if width_sidebars == true %}
+				<div class="sidebar{% if template == 'blog' or template == 'article' %} col-sm-4{% else %} col-sm-3{% endif %}{% if settings.sidebar_toggle == 'sidebar_toggle_left' %} sidebar_left{% if template == 'blog' or template == 'article' %} col-sm-pull-8{% else %} col-sm-pull-9{% endif %}{% else %} sidebar_right{% endif %}">
+					{% case template %}
+						{% when 'blog', 'article' %}
+							{% include 'widget-sidebar-blog' %}
+						{% else %}
+							{% if settings.sidebar_widget_collections_toggle %}
+								{% include 'widget-sidebar-collections' %}
+							{% endif %}
+							{% if settings.sidebar_widget_types_toggle %}
+								{% include 'widget-sidebar-types' %}
+							{% endif %}
+							{% if settings.sidebar_widget_vendors_toggle %}
+								{% include 'widget-sidebar-vendors' %}
+							{% endif %}
+							{% if settings.sidebar_widget_products_toggle %}
+								{% include 'widget-sidebar-products' %}
+							{% endif %}
+					{% endcase %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+</div><!-- / .wrapper_right -->
+
+</div><!-- / .wrapper_main -->
+
+<div class="wrapper_left">
+	<a id="sidebar_btn" href="#"><i class="fa fa-bars"></i></a>
+
+	<div id="sidebar_main" class="nano {% if template == 'index' %}sidebar_main_homepage{% else %}sidebar_main_subpages{% endif %}">
+		<div class="nano-content">
+			<div class="sidebar_top">
+				<!-- HEADER -->
+				<header>
+				
+					<!-- LOGO -->
+					<div id="logo" class="logo_main">
+						<a href="/">
+						{% if settings.use_logo %}
+						{{ 'logo.png' | asset_url | img_tag: shop.name }}
+						{% if settings.use_logo_retina %}<script>var pixelRatio=window.devicePixelRatio?window.devicePixelRatio:1,attr1x=$("#logo img").attr("src").replace(".png","@2x.png");$(window).on("load",function(){pixelRatio>1&&$("#logo img").attr("src",attr1x).attr("width","250px")});</script>{% endif %}
+						{% else %}
+						<b>{{ shop.name }}</b>
+						{% endif %}
+						</a>
+					</div>
+
+					<div class="border_line"></div>
+
+					<!-- MEGAMENU -->
+					{% include 'widget-megamenu' %}
+
+					<div class="border_line"></div>
+
+					<!-- HEADER SEARCH -->
+					<div class="header_search">
+						<form action="/search" method="get" class="search_form">
+							<button id="search-submit" type="submit"><i class="fa fa-search"></i></button>
+							<input id="search-field" name="q" type="text" placeholder="{% assign X = 'layout.header.search' | t %}{% if X.size > 0 %}{{ X }}{% else %}Search store{% endif %}" class="hint" />
+							
+						</form>
+					</div>
+
+					{% if settings.custom_header_toggle %}
+						<!-- CUSTOM HEADER BLOCK -->
+						<div class="custom_header_wrap">
+						<a href="tel:{{ settings.custom_header}}">
+							{% assign X = 'custom_blocks.custom_header.text' | t %}{% if X.size > 0 %}{{ X }}{% else %}<h3>{{ settings.custom_header }}</h3>{% endif %}
+						</a>
+						</div>
+					{% endif %}
+
+
+					<!-- HEADER CART -->
+					<div class="header_cart">
+						<a href="/cart"><i class="fl-bigmug-line-shopping198"></i><b>{% assign X = 'layout.header.cart' | t %}{% if X.size > 0 %}{{ X }}{% else %}Cart{% endif %}:</b><span id="cart_items">{{ cart.item_count }}</span>{% assign X = 'layout.header.cart_items' | t %}{% if X.size > 0 %}{{ X }}{% else %}item(s){% endif %}</a>
+					</div>
+
+					<div class="border_line"></div>
+
+					{% if settings.show_multiple_currencies %}
+						<!-- CURRENCY SWITCHER-->
+						<div class="header_currency">
+							<label for="currencies">{% assign X = 'layout.header.currency' | t %}{% if X.size > 0 %}{{ X }}{% else %}Currency{% endif %}</label>
+
+							<select id="currencies" name="currencies">
+								{% capture codes %},USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,{% endcapture %}
+								{% assign supported_codes = settings.supported_currencies | split: ' ' %}
+									<option value="{{ shop.currency }}" selected="selected">{{ shop.currency }}</option>
+									{% for code in supported_codes %}
+										{% if code != shop.currency and codes contains code %}
+											<option value="{{ code }}">{{ code }}</option>
+										{% endif %}
+									{% endfor %}
+							</select>
+						</div>
+					{% endif %}
+
+					{% if shop.customer_accounts_enabled %}
+					<!-- USER MENU -->
+					<ul class="header_user">
+						{% if customer %}
+							<li><a href="/account"><i class="fa fa-user"></i>{{ customer.first_name | truncate:15 }}</a></li>
+							<li><a href="/account/logout">{% assign X = 'layout.header.logout' | t %}{% if X.size > 0 %}{{ X }}{% else %}Log out{% endif %}</a></li>
+						{% else %}
+							<li><a href="/account/login">{% assign X = 'layout.header.login' | t %}{% if X.size > 0 %}{{ X }}{% else %}Log in{% endif %}</a></li>
+							{% if shop.customer_accounts_optional %}
+								<li><a href="/account/register">{% assign X = 'layout.header.create_account' | t %}{% if X.size > 0 %}{{ X }}{% else %}Create an account{% endif %}</a></li>
+							{% endif %}
+						{% endif %}
+						<li class="checkout"><a href="/cart">{% assign X = 'layout.header.checkout' | t %}{% if X.size > 0 %}{{ X }}{% else %}Checkout{% endif %}</a></li>
+					</ul>
+					{% endif %}
+	
+				</header>
+			</div>
+			<!-- FOOTER -->
+			<footer>
+				<div class="sidebar_bottom">
+					<div class="copyright">
+						<p role="contentinfo">{% assign copyright_year = "now" | date: "%Y" %}{% assign X = 'layout.footer.copyright' | t: year: copyright_year, shop_name: shop.name %}{% if X.size > 0 %}{{ X }}{% else %}© {{ copyright_year }} Computers. All rights reserved.{% endif %}{% if settings.footer_copyright %} Design by <a href="//templatemonster.com">TemplateMonster.com</a>.{% endif %}{% if settings.footer_powered %} {{ powered_by_link }}{% endif %}</p><!-- Design by templatemonster.com -->
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+</div>
+
+</div><!-- / #wrapper3 -->
+</div><!-- / #wrapper2 -->
+</div><!-- / #wrapper1 -->
+
+<!-- olark chat -->
+{% if settings.olark_chat_toggle %}
+	{{ settings.olark_chat_code }}
+{% endif %}
+
+<!-- JS -->
+{% include 'snippet-js-footer' %}
+
+</body>
+</html>

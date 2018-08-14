@@ -1,0 +1,55 @@
+<div class="baners_wrap">
+        <div class="banner_1_wrap">
+            <div class="banner_1">
+                <a href="{{ settings.banner_1_link }}">
+                    <div class="img_wrap">
+                        <img src="{{ 'banner_1_img.jpg' | asset_url }}" alt="" />
+                    </div>
+                    <div class="banner_content">    
+                        <h3>{% assign X = 'custom_blocks.banner_1.text_1' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_1_text_1}}{% endif %}</h3>
+                        <h4>{% assign X = 'custom_blocks.banner_1.text_2' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_1_text_2 }}{% endif %}</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="banner_2_wrap">
+            <div class="banner_2">
+                <a href="{{ settings.banner_2_link }}">
+                    <div class="img_wrap">
+                    <img src="{{ 'banner_2_img.jpg' | asset_url }}" alt="" />
+                    </div>
+                    <div class="banner_content">
+                        <h3>{% assign X = 'custom_blocks.banner_2.text_1' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_2_text_1}}{% endif %}</h3>
+                        <h4>{% assign X = 'custom_blocks.banner_2.text_2' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_2_text_2 }}{% endif %}</h4>
+                    </div>
+                </a>
+            </div>
+        
+            <div class="banner_3">
+                <a href="{{ settings.banner_3_link }}">
+                    <div class="img_wrap">
+                    <img src="{{ 'banner_3_img.jpg' | asset_url }}" alt="" />
+                    </div>
+                    <div class="banner_content">    
+                        <h4>{% assign X = 'custom_blocks.banner_3.text' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_3_text }}{% endif %}</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="banner_3_wrap">
+            <div class="banner_4">
+                <a href="{{ settings.banner_4_link }}">
+                    <div class="img_wrap">
+                    <img src="{{ 'banner_4_img.jpg' | asset_url }}" alt="" />
+                    </div>
+                    <div class="banner_content">    
+                        <h3>{% assign X = 'custom_blocks.banner_4.text_1' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_4_text_1}}{% endif %}</h3>
+                        <h4>{% assign X = 'custom_blocks.banner_4.text_2' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.banner_4_text_2 }}{% endif %}</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+</div>

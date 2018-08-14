@@ -1,0 +1,12 @@
+<div class="rd-parallax">
+    <div class="rd-parallax-layer" data-speed="0.15" data-type="media" data-url="{% if settings.homepage_info_img_toggle %}{{ 'homepage_info_img.jpg' | asset_url }}{% endif %}"></div>
+
+    <div class="homepage_info__content" data-speed="0.3" data-type="html">
+        
+            <h3>{% assign X = 'custom_blocks.homepage_info_block.text_1' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.homepage_info_text_1 }}{% endif %}</h3>
+            <h4>{% assign X = 'custom_blocks.homepage_info_block.text_2' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.homepage_info_text_2 }}{% endif %}</h4>
+            <h5>{% assign X = 'custom_blocks.homepage_info_block.text_3' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.homepage_info_text_3 }}{% endif %}</h5>
+            <a class="btn btn-riad" href="{{ settings.homepage_info_block_link }}">{% assign X = 'custom_blocks.homepage_info_block.button' | t %}{% if X.size > 0 %}{{ X }}{% else %}{{ settings.homepage_info_block_btn }}{% endif %}</a>
+        
+    </div>
+</div>

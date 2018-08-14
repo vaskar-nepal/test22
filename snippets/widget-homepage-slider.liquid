@@ -1,0 +1,66 @@
+<div id="swiper" class="swiper-container">
+	<div class="swiper-wrapper">
+		{% for i in (1..3) %}
+			{% capture slide_toggle %}slide{{ i }}_toggle{% endcapture %}
+			{% capture slide_image %}slide{{ i }}_image.jpg{% endcapture %}
+			{% capture slide_link %}slide{{ i }}_link{% endcapture %}
+
+			{% if settings.slider_captions %}
+				{% capture caption1 %}slide{{ i }}_caption1{% endcapture %}
+				{% capture caption1_lang %}slider.slide_{{ i }}.caption_1{% endcapture %}
+				{% capture caption2 %}slide{{ i }}_caption2{% endcapture %}
+				{% capture caption2_lang %}slider.slide_{{ i }}.caption_2{% endcapture %}
+				{% capture caption3 %}slide{{ i }}_caption3{% endcapture %}
+				{% capture caption3_lang %}slider.slide_{{ i }}.caption_3{% endcapture %}
+				{% capture caption4 %}slide{{ i }}_caption4{% endcapture %}
+				{% capture caption4_lang %}slider.slide_{{ i }}.caption_4{% endcapture %}
+				{% capture caption5 %}slide{{ i }}_caption5{% endcapture %}
+				{% capture caption5_lang %}slider.slide_{{ i }}.caption_5{% endcapture %}
+			{% endif %}
+
+			{% if settings[slide_toggle] %}
+				<div class="swiper-slide">
+					{% if settings[slide_link] and settings[slide_link] != '' %}<a href="{{ settings[slide_link] }}">{% endif %}
+						<img src="{{ slide_image | asset_url }}" alt="" />
+						{% if settings.slider_captions %}
+							<div class="slider_caption ">
+								{% assign A = caption1_lang | t %}{% if A.size > 0 %}<p>{{ A }}</p>{% else %}<p>{{ settings[caption1] }}</p>{% endif %}
+								{% assign B = caption2_lang | t %}{% if B.size > 0 %}<p>{{ B }}</p>{% else %}<p>{{ settings[caption2] }}</p>{% endif %}
+								{% assign C = caption3_lang | t %}{% if C.size > 0 %}<p>{{ C }}</p>{% else %}<p>{{ settings[caption3] }}</p>{% endif %}
+								{% assign D = caption4_lang | t %}{% if D.size > 0 %}<p>{{ D }}</p>{% else %}<p>{{ settings[caption4] }}</p>{% endif %}
+								{% assign E = caption5_lang | t %}{% if E.size > 0 %}<p>{{ E }}</p>{% else %}<p>{{ settings[caption5] }}</p>{% endif %}
+							</div>
+						{% endif %}
+					{% if settings[slide_link] and settings[slide_link] != '' %}</a>{% endif %}
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+
+	{% if settings.slider_controls %}
+		<div id="swiper_pagination"></div>
+
+		<div id="swiper_btn_prev" class="swiper_btn"></div>
+		<div id="swiper_btn_next" class="swiper_btn"></div>
+	{% endif %}
+</div>
+
+<script>
+jQuery(document).ready(function($) {
+	var mySwiper = new Swiper('#swiper', {
+		effect: 'fade',
+		{% if settings.slider_autoplay %}
+			autoplay: {% if settings.slider_autoplay_duration and settings.slider_autoplay_duration != '' %}{{ settings.slider_autoplay_duration }}{% else %}5000{% endif %},
+		{% endif %}
+		loop: true,
+		speed: 500,
+		autoplayDisableOnInteraction: false,
+		{% if settings.slider_controls %}
+			pagination: '#swiper_pagination',
+			paginationClickable: true,
+			prevButton: '#swiper_btn_prev',
+			nextButton: '#swiper_btn_next',
+		{% endif %}
+	});
+});
+</script>
